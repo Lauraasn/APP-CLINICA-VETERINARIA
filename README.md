@@ -6,23 +6,28 @@ O objetivo, por enquanto, é criar a estrutura inicial de pastas e arquivos do p
 
 ```mermaid
 erDiagram
+    SEXO || --o{ PESSOA : categoriza
+    SEXO || --o{ ANIMAL : categoriza
     PESSOA || --o{ CLIENTE : pode_ser
     PESSOA || --o{ FUNCIONÁRIO : pode_ser
-    PESSOA || --o{ VETERINÁRIO : pode_ser
-    PESSOA || --o{ VENDEDOR : pode_ser
     CLIENTE ||--o{ PEDIDO : faz
     CLIENTE || --o{ ANIMAL : dono_do
-    CLIENTE || --o{ ATENDIMENTO : requere
+    ANIMAL || --o{ ATENDIMENTO : participa_do
     VETERINÁRIO || --o{ ATENDIMENTO : realiza
-    VENDEDOR || --o{ PRODUTO : vende
-    VENDEDOR || --o{ CLIENTE : vende_para
+    ATENDENTE || --o{ PEDIDO : faz
+    ATENDENTE || --o{ ATENDIMENTO : agenda
     FUNCIONÁRIO || --o{ VETERINÁRIO : pode_ser
-    FUNCIONÁRIO || --o{ VENDEDOR : pode_ser
+    FUNCIONÁRIO || --o{ ATENDENTE : pode_ser
     PEDIDO ||--|{ PRODUTO_PEDIDO : contém
+    PEDIDO ||--|{ NOTA_FISCAL : gera
     PRODUTO ||--o{ PRODUTO_PEDIDO : inclui
-    ANIMAL ||--o{ CLIENTE : pertence
+    SEXO {
+        serial id PK
+        string descricao
+    }
     PESSOA {
-        serial id
+        serial id PK
+        int id_sexo FK
         string nome
         string email
         int telefone
@@ -31,23 +36,26 @@ erDiagram
     }
     CLIENTE {
         string id PK
-        string name
-        string email
+        int pessoa_id FK
+        int id_endereco
     }
     FUNCIONÁRIO{
         serial id PK
+        int pessoa_id FK
+        date data_admissao
         float salario
     }
     VETERINÁRIO{
         serial id PK
-        int pessoa_id FK
+        int funcionario_id FK
         string especialidade
         string crmv
         string cfmv
     }
-    VENDEDOR {
+    ATENDENTE {
         serial id PK
-        int pessoa_id FK
+        int funcionario_id FK
+        int qtd_atendimentos
     }
     ANIMAL {
         serial id PK
@@ -60,23 +68,35 @@ erDiagram
     ATENDIMENTO {
         serial id PK
         int veterinario_id FK
-        int cliente_id FK
+        int animal_id FK
         string tipo_atendimento
         float valor
+        string texto_consulta
     }
     PEDIDO {
         serial id PK
+        int cliente_id FK
+        int quantidade
+        float preco
         date dataPedido
         string status
     }
+    NOTA_FISCAL {
+        serial id PK
+        int id_pedido FK
+        int numero_nf
+
+    }
     PRODUTO {
         serial id PK
-        string name
+        string nome
+        string marca
         float preco
         int estoque
     }
     PRODUTO_PEDIDO {
-        int quantidade
-        float preco
+        serial id PK
+        int pedido_id FK
+        int produto_id FK
     }
 ```
