@@ -6,97 +6,114 @@ O objetivo, por enquanto, é criar a estrutura inicial de pastas e arquivos do p
 
 ```mermaid
 erDiagram
-    SEXO || --o{ PESSOA : categoriza
-    SEXO || --o{ ANIMAL : categoriza
-    PESSOA || --o{ CLIENTE : pode_ser
-    PESSOA || --o{ FUNCIONÁRIO : pode_ser
+    SEXO ||--o{ PESSOA : categoriza
+    SEXO ||--o{ ANIMAL : categoriza
+    PESSOA ||--o{ CLIENTE : pode_ser
+    PESSOA ||--o{ FUNCIONARIO : pode_ser
     CLIENTE ||--o{ PEDIDO : faz
-    CLIENTE || --o{ ANIMAL : dono_do
-    ANIMAL || --o{ ATENDIMENTO : participa_do
-    VETERINÁRIO || --o{ ATENDIMENTO : realiza
-    ATENDENTE || --o{ PEDIDO : faz
-    ATENDENTE || --o{ ATENDIMENTO : agenda
-    FUNCIONÁRIO || --o{ VETERINÁRIO : pode_ser
-    FUNCIONÁRIO || --o{ ATENDENTE : pode_ser
+    CLIENTE ||--o{ ANIMAL : dono_do
+    ANIMAL ||--o{ ATENDIMENTO : participa_do
+    VETERINARIO ||--o{ ATENDIMENTO : realiza
+    ATENDENTE ||--o{ PEDIDO : faz
+    ATENDENTE ||--o{ ATENDIMENTO : agenda
+    FUNCIONARIO ||--o{ VETERINARIO : pode_ser
+    FUNCIONARIO ||--o{ ATENDENTE : pode_ser
     PEDIDO ||--|{ PRODUTO_PEDIDO : contém
     PEDIDO ||--|{ NOTA_FISCAL : gera
     PRODUTO ||--o{ PRODUTO_PEDIDO : inclui
+
     SEXO {
-        serial id PK
-        string descricao
+        serial ID PK
+        varchar DESCRICAO
+    }
+    ENDERECO {
+        serial ID PK
+        varchar RUA
+        varchar NUMERO
+        varchar BAIRRO
+        varchar CIDADE
+        varchar ESTADO
+        varchar CEP
+    }
+    CLASSE {
+        serial ID PK
+        varchar ESPECIE
+        varchar RACA
     }
     PESSOA {
-        serial id PK
-        int id_sexo FK
-        string nome
-        string email
-        int telefone
-        int cpf
-        date data_nasc
+        serial ID PK
+        varchar NOME
+        date DATA_NASCIMENTO
+        int ID_SEXO FK
+        varchar EMAIL
+        bigint CPF
+        integer TELEFONE
     }
-    CLIENTE {
-        string id PK
-        int pessoa_id FK
-        int id_endereco
-    }
-    FUNCIONÁRIO{
-        serial id PK
-        int pessoa_id FK
-        date data_admissao
-        float salario
-    }
-    VETERINÁRIO{
-        serial id PK
-        int funcionario_id FK
-        string especialidade
-        string crmv
-        string cfmv
+    FUNCIONARIO {
+        serial ID PK
+        int ID_PESSOA FK
+        numeric SALARIO
+        date DATA_ADMISSAO
     }
     ATENDENTE {
-        serial id PK
-        int funcionario_id FK
-        int qtd_atendimentos
+        serial ID PK
+        int ID_FUNCIONARIO FK
+        integer QTD_ATENDIMENTOS
+    }
+    VETERINARIO {
+        serial ID PK
+        int ID_FUNCIONARIO FK
+        varchar ESPECIALIDADE
+        varchar CRMV
+    }
+    CLIENTE {
+        serial ID PK
+        int ID_PESSOA FK
+        int ID_ENDERECO FK
     }
     ANIMAL {
-        serial id PK
-        int cliente_id FK
-        string nome
-        string especie
-        string raca
-        string enfermidade
+        serial ID PK
+        int ID_SEXO FK
+        int ID_CLASSE FK
+        int ID_CLIENTE FK
+        varchar NOME
+        date DATA_NASCIMENTO
+        numeric PESO
     }
     ATENDIMENTO {
-        serial id PK
-        int veterinario_id FK
-        int animal_id FK
-        string tipo_atendimento
-        float valor
-        string texto_consulta
+        serial ID PK
+        int ID_ATENDENTE FK
+        int ID_VETERINARIO FK
+        int ID_ANIMAL FK
+        varchar TIPO_ATENDIMENTO
+        numeric VALOR
+        date DATA_ATENDIMENTO
+        text TEXTO_CONSULTA
     }
     PEDIDO {
-        serial id PK
-        int cliente_id FK
-        int quantidade
-        float preco
-        date dataPedido
-        string status
-    }
-    NOTA_FISCAL {
-        serial id PK
-        int id_pedido FK
-        int numero_nf
-
+        serial ID PK
+        int ID_CLIENTE FK
+        date DATA_PEDIDO
+        varchar STATUS
     }
     PRODUTO {
-        serial id PK
-        string nome
-        string marca
-        float preco
-        int estoque
+        serial ID PK
+        varchar NOME
+        varchar MARCA
+        numeric PRECO
+        integer ESTOQUE
     }
     PRODUTO_PEDIDO {
-        serial id PK
-        int pedido_id FK
-        int produto_id FK
+        serial ID PK
+        int ID_PEDIDO FK
+        int ID_PRODUTO FK
+        integer QUANTIDADE
+        numeric VALOR_TOTAL
+    }
+    NOTA_FISCAL {
+        serial ID PK
+        int ID_PRODUTO_PEDIDO FK
+        date DATA_EMISSAO
+        varchar NUMERO_SERIE
     }
 ```
