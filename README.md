@@ -1,6 +1,8 @@
-# APP-CLINICA-VETERINARIA
-## Trabalho da disciplina de Introdução a Banco de Dados com o tema "Clínica Veterinária"
-O objetivo, por enquanto, é criar a estrutura inicial de pastas e arquivos do projeto, uma versão inicial do banco de dados e o modelo de dados do projeto, utilizando o diagrama MERMAID para representar as tabelas e relações.
+# 🐾 MeuPET — Aplicativo para Clínica Veterinária
+## 📋 Apresentação do Projeto
+**MeuPET** será uma aplicação para um trabalho das disciplinas de Introdução a Banco de Dados e de Engenharia de Software com o tema "Clínica Veterinária", focando nos serviços de tratamento de animais domésticos e venda de produtos pet. O objetivo geral da aplicação é centralizar o atendimento ao cliente, facilitando o agendamento de consultas, o acompanhamento da saúde dos pets e a compra de produtos.
+
+**Público-alvo:** Clínica veterinária fictícia que deseja digitalizar e otimizar sua gestão de atendimentos e vendas, além dos possíveis clientes da clínica que são donos de animais domésticos (cães e gatos) que buscam praticidade no cuidado com seus animais.
 
 ## Modelo de Dados
 
@@ -8,37 +10,60 @@ O objetivo, por enquanto, é criar a estrutura inicial de pastas e arquivos do p
 erDiagram
     SEXO ||--o{ PESSOA : categoriza
     SEXO ||--o{ ANIMAL : categoriza
+    ESTADO ||--o{ CIDADE : contem
+    CIDADE ||--o{ BAIRRO : contem
+    BAIRRO ||--o{ ENDERECO : contem
+    ENDERECO ||--o{ PESSOA : contem
     PESSOA ||--o{ CLIENTE : pode_ser
     PESSOA ||--o{ FUNCIONARIO : pode_ser
     CLIENTE ||--o{ PEDIDO : faz
     CLIENTE ||--o{ ANIMAL : dono_do
+    ESPECIE ||--o{ CLASSE : contem
+    CLASSE ||--o{ ANIMAL : categoriza
     ANIMAL ||--o{ ATENDIMENTO : participa_do
     VETERINARIO ||--o{ ATENDIMENTO : realiza
     ATENDENTE ||--o{ PEDIDO : faz
     ATENDENTE ||--o{ ATENDIMENTO : agenda
     FUNCIONARIO ||--o{ VETERINARIO : pode_ser
     FUNCIONARIO ||--o{ ATENDENTE : pode_ser
-    PEDIDO ||--|{ PRODUTO_PEDIDO : contém
-    PEDIDO ||--|{ NOTA_FISCAL : gera
+    PEDIDO ||--|{ PRODUTO_PEDIDO : contem
+    PRODUTO_PEDIDO ||--|{ NOTA_FISCAL : gera
     PRODUTO ||--o{ PRODUTO_PEDIDO : inclui
 
     SEXO {
         serial ID PK
         varchar DESCRICAO
     }
+    ESTADO {
+        serial ID PK
+        varchar NOME
+        varchar SIGLA
+    }
+    CIDADE {
+        serial ID PK
+        int ID_ESTADO FK
+        varchar NOME
+    }
+    BAIRRO {
+        serial ID PK
+        int ID_CIDADE FK
+        varchar NOME
+    }
     ENDERECO {
         serial ID PK
+        int ID_BAIRRO FK
         varchar RUA
         varchar NUMERO
-        varchar BAIRRO
-        varchar CIDADE
-        varchar ESTADO
         varchar CEP
+    }
+    ESPECIE {
+        serial ID PK
+        varchar NOME
     }
     CLASSE {
         serial ID PK
-        varchar ESPECIE
-        varchar RACA
+        int ID_ESPECIE FK
+        varchar NOME
     }
     PESSOA {
         serial ID PK

@@ -3,14 +3,29 @@ INSERT INTO SEXO (DESCRICAO) VALUES
   ('Feminino'),
   ('Indefinido');
 
-INSERT INTO ENDERECO (RUA, NUMERO, BAIRRO, CIDADE, ESTADO, CEP) VALUES
-  ('Av. Paulista', '1000', 'Bela Vista', 'São Paulo', 'SP', '01310-000'),
-  ('Rua das Flores', '123', 'Jardim', 'Campinas', 'SP', '13000-000');
+INSERT INTO ESTADO (NOME, SIGLA) VALUES
+  ('São Paulo', 'SP'),
+  ('Rio de Janeiro', 'RJ'),
+  ('Rondônia', 'RO');
+
+INSERT INTO CIDADE (NOME, ID_ESTADO) VALUES
+  ('São Paulo', 1),
+  ('Rio de Janeiro', 2),
+  ('Porto Velho', 3);
+
+INSERT INTO BAIRRO (NOME, ID_CIDADE) VALUES
+  ('Bela Vista', 1),
+  ('Jardim', 2),
+  ('Centro', 3);
+
+INSERT INTO ENDERECO (RUA, NUMERO, ID_BAIRRO, CEP) VALUES
+  ('Av. Paulista', '1000', 1, '01310-000'),
+  ('Rua das Flores', '123', 2, '13000-000'),
+  ('Av. Farquar', '456', 3, '78900-000');
 
 INSERT INTO CLASSE (ESPECIE, RACA) VALUES
   ('Canino', 'Labrador'),
-  ('Felino', 'Persa'),
-  ('Ave', 'Papagaio');
+  ('Felino', 'Persa');
 
 INSERT INTO PESSOA (NOME, DATA_NASCIMENTO, ID_SEXO, EMAIL, CPF, TELEFONE) VALUES
   ('João Silva', '1985-07-15', 1, 'joao.silva@example.com', 12345678901, 11999990000),
