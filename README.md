@@ -2,7 +2,7 @@
 ## 📋 Apresentação do Projeto
 **MeuPET** será uma aplicação para um trabalho das disciplinas de Introdução a Banco de Dados e de Engenharia de Software com o tema "Clínica Veterinária", focando nos serviços de tratamento de animais domésticos e venda de produtos pet. O objetivo geral da aplicação é centralizar o atendimento ao cliente, facilitando o agendamento de consultas, o acompanhamento da saúde dos pets e a compra de produtos.
 
-**Público-alvo:** Clínica veterinária fictícia que deseja digitalizar e otimizar sua gestão de atendimentos e vendas, além dos possíveis clientes da clínica que são donos de animais domésticos (cães e gatos) que buscam praticidade no cuidado com seus animais.
+**Público-alvo:** Clínica veterinária fictícia que deseja digitalizar e otimizar sua gestão de atendimentos e vendas, além dos possíveis clientes da clínica que são donos de animais domésticos (somente cães e gatos) que buscam praticidade no cuidado com seus animais.
 
 ## Modelo de Dados
 
@@ -29,6 +29,18 @@ erDiagram
     PEDIDO ||--|{ PRODUTO_PEDIDO : contem
     PRODUTO_PEDIDO ||--|{ NOTA_FISCAL : gera
     PRODUTO ||--o{ PRODUTO_PEDIDO : inclui
+
+    CLIENTE ||--o{ PONTOS_TRANSACAO : acumula
+    CLIENTE ||--o{ RESGATE_BENEFICIO : realiza
+    PROGRAMA_FIDELIDADE ||--o{ NIVEL_FIDELIDADE : define
+    PROGRAMA_FIDELIDADE ||--o{ CLIENTE : inclui
+    NIVEL_FIDELIDADE ||--o{ BENEFICIO : concede
+    PONTOS_TRANSACAO }o--|| PEDIDO : gerado_por
+    PONTOS_TRANSACAO }o--o| ATENDIMENTO : gerado_por
+    BENEFICIO ||--o{ RESGATE_BENEFICIO : usado_em
+
+    FUNCIONARIO ||--o{ AVALIACAO_DESEMPENHO : recebe
+    AVALIACAO_DESEMPENHO ||--|| BONUS_MENSAL : gera
 
     SEXO {
         serial ID PK
@@ -95,6 +107,7 @@ erDiagram
         serial ID PK
         int ID_PESSOA FK
         int ID_ENDERECO FK
+        int ID_PROGRAMA FK
     }
     ANIMAL {
         serial ID PK
@@ -140,5 +153,61 @@ erDiagram
         int ID_PRODUTO_PEDIDO FK
         date DATA_EMISSAO
         varchar NUMERO_SERIE
+    }
+    PROGRAMA_FIDELIDADE {
+        serial ID PK
+        varchar NOME
+        text DESCRICAO
+        date DATA_INICIO
+        date DATA_FIM
+    }
+    NIVEL_FIDELIDADE {
+        serial ID PK
+        int ID_PROGRAMA FK
+        varchar NOME
+        int PONTOS_MINIMOS
+        int PONTOS_MAXIMOS
+        numeric MULTIPLICADOR_PONTOS
+    }
+    BENEFICIO {
+        serial ID PK
+        int ID_NIVEL FK
+        varchar TIPO
+        numeric VALOR_DESCONTO
+        varchar DESCRICAO
+    }
+    PONTOS_TRANSACAO {
+        serial ID PK
+        int ID_CLIENTE FK
+        int ID_PEDIDO FK
+        int ID_ATENDIMENTO FK
+        int PONTOS_GANHOS
+        date DATA_TRANSACAO
+        varchar TIPO_ORIGEM
+    }
+    RESGATE_BENEFICIO {
+        serial ID PK
+        int ID_CLIENTE FK
+        int ID_BENEFICIO FK
+        date DATA_RESGATE
+        varchar STATUS
+    }
+    AVALIACAO_DESEMPENHO {
+        serial ID PK
+        int ID_FUNCIONARIO FK
+        int MES
+        int ANO
+        int ATENDIMENTOS_MES
+        numeric SATISFACAO_MEDIA
+        numeric PONTUALIDADE
+        int PONTUACAO_TOTAL
+        text OBSERVACOES
+    }
+    BONUS_MENSAL {
+        serial ID PK
+        int ID_AVALIACAO FK
+        numeric VALOR_BONUS
+        date DATA_PAGAMENTO
+        varchar STATUS
     }
 ```
