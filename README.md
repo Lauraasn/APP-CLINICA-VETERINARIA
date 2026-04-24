@@ -211,3 +211,7 @@ erDiagram
         varchar STATUS
     }
 ```
+
+## Protótipo
+
+![Imagem do protótipo da aplicação](prototipo.png)
